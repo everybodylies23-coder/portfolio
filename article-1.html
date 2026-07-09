@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生成AI 著作権侵害 対策 | Writhing記事</title>
+  <meta name="description" content="生成AI 著作権侵害 対策">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Noto+Serif+JP:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       COMMON STYLES (Aligned with index.html)
+       ========================================================================== */
+    :root {
+      --color-bg: #07080a;
+      --color-surface: #0f1115;
+      --color-surface-card: #14171d;
+      --color-border: #232a33;
+      --color-text-primary: #e1e7f0;
+      --color-text-secondary: #8c9ba5;
+      --color-text-muted: #4e5a66;
+      --color-indigo-dark: #0f1d30;
+      --color-indigo-bright: #3867d6;
+      --color-indigo-light: #5f8de8;
+      --color-copper: #8b5a2b; /* Muted leather brown */
+      --color-copper-light: #c28854;
+      
+      --font-serif: 'Noto Serif JP', 'Playfair Display', Georgia, serif;
+      --font-sans: 'Montserrat', 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      
+      --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      font-family: var(--font-serif); /* Main body is Serif for literary feel */
+      line-height: 2.0; /* Wider spacing for comfortable reading */
+      letter-spacing: 0.03em;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION (Hamburger & Drawer UI to match index.html)
+       ========================================================================== */
+    header {
+      background-color: rgba(7, 8, 10, 0.95);
+      border-bottom: 1px solid var(--color-border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+    }
+
+    .logo {
+      font-family: var(--font-serif);
+      font-weight: 900;
+      font-size: 1.5rem;
+      letter-spacing: 0.15em;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-indigo {
+      color: var(--color-indigo-light);
+    }
+
+    .hamburger-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+    }
+
+    .hamburger-btn span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--color-text-primary);
+      transition: var(--transition-smooth);
+    }
+
+    .hamburger-btn:hover span {
+      background-color: var(--color-copper);
+    }
+
+    /* Drawer Overlay */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(10, 11, 13, 0.95);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition-smooth);
+    }
+
+    .drawer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-close-btn {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-primary);
+      font-size: 1.25rem;
+      transition: var(--transition-smooth);
+    }
+
+    .drawer-close-btn:hover {
+      border-color: var(--color-copper);
+      color: var(--color-copper-light);
+      transform: rotate(90deg);
+    }
+
+    .drawer-menu {
+      list-style: none;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .drawer-menu-link {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      letter-spacing: 0.15em;
+      color: var(--color-text-secondary);
+      transition: var(--transition-smooth);
+    }
+
+    .drawer-menu-link:hover {
+      color: #ffffff;
+    }
+
+    .drawer-menu-link span {
+      color: var(--color-copper);
+      font-size: 1.2rem;
+      margin-right: 12px;
+    }
+
+    /* ==========================================================================
+       LITERARY ARTICLE HEADER
+       ========================================================================== */
+    .article-header-section {
+      padding: 180px 0 80px;
+      text-align: center;
+      background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-bg) 100%);
+    }
+
+    .breadcrumbs {
+      display: inline-flex;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 32px;
+    }
+
+    .breadcrumbs a:hover {
+      color: var(--color-copper-light);
+    }
+
+    .article-category {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--color-copper-light);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .article-title {
+      font-size: 2.8rem;
+      line-height: 1.45;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      max-width: 900px;
+      margin: 0 auto 32px;
+      letter-spacing: 0.05em;
+    }
+
+    .article-date {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ==========================================================================
+       POETIC ARTICLE BODY LAYOUT
+       ========================================================================== */
+    .essay-layout {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px 120px;
+    }
+
+    /* Huge Hero Graphic */
+    .essay-main-visual {
+      border: 1px solid var(--color-border);
+      padding: 16px;
+      background-color: var(--color-surface);
+      margin-bottom: 80px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    }
+
+    .visual-placeholder {
+      background: linear-gradient(135deg, #111a24 0%, #060a0f 100%); 
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .visual-text {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--color-copper-light);
+      text-transform: uppercase;
+    }
+
+    .visual-caption {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      text-align: center;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    .essay-content p {
+      font-size: 1.05rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 48px;
+      text-align: justify;
+      text-indent: 1em;
+    }
+
+    .essay-content p.no-indent {
+      text-indent: 0;
+    }
+
+    .essay-content h2 {
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      margin: 96px 0 40px;
+      text-align: center;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+
+    .essay-content h2::after {
+      content: '◇';
+      display: block;
+      font-size: 0.8rem;
+      color: var(--color-copper);
+      margin-top: 16px;
+    }
+
+    /* Poetry Block */
+    .poetry-block {
+      margin: 64px auto;
+      max-width: 600px;
+      text-align: center;
+      font-style: italic;
+      color: var(--color-text-primary);
+      position: relative;
+      padding: 32px 0;
+    }
+
+    .poetry-block::before, .poetry-block::after {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background-color: var(--color-border);
+      margin: 0 auto;
+    }
+
+    .poetry-block::before { margin-bottom: 24px; }
+    .poetry-block::after { margin-top: 24px; }
+
+    .poetry-line {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* Inline Image / Photo Break */
+    .photo-break {
+      margin: 80px 0;
+      text-align: center;
+    }
+
+    .photo-frame {
+      border: 1px solid var(--color-border);
+      padding: 8px;
+      background-color: var(--color-surface);
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .photo-frame .img-placeholder {
+      background: linear-gradient(135deg, #13171e 0%, #0a0c10 100%);
+      width: 500px;
+      height: 300px;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    .photo-desc {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 8px;
+    }
+
+    /* Next Article Link Block */
+    .next-article-link {
+      margin-top: 120px;
+      border: 1px solid var(--color-border);
+      background-color: var(--color-surface);
+      padding: 40px;
+      text-align: center;
+      transition: var(--transition-smooth);
+      display: block;
+    }
+
+    .next-article-link:hover {
+      border-color: var(--color-copper);
+      background-color: var(--color-surface-card);
+    }
+
+    .next-label {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      color: var(--color-copper);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .next-title {
+      font-size: 1.35rem;
+      color: var(--color-text-primary);
+      margin-bottom: 8px;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      background-color: #030405;
+      border-top: 1px solid var(--color-border);
+      padding: 60px 0;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+    }
+
+     .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            letter-spacing: 0.2em;
+            margin-bottom: 32px;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 48px;
+            list-style: none;
+        }
+
+        .footer-nav a {
+            font-size: 12px;
+            color: #666666;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-nav a:hover {
+            color: #1a1a1a;
+        }
+
+        .copyright {
+            font-size: 11px;
+            color: #999999;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+    /*.footer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+    }
+
+    .footer-left {
+      max-width: 600px;
+    }
+
+    .footer-brand {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    }
+
+    .footer-desc {
+      line-height: 1.8;
+      color: var(--color-text-muted);
+      margin-bottom: 24px;
+    }
+
+    .footer-right {
+      text-align: right;
+      min-width: 300px;
+    }
+
+    .footer-right-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .footer-address {
+      line-height: 1.8;
+      color: var(--color-text-muted);
+      font-style: normal;
+    }*/
+
+    /* ==========================================================================
+       RESPONSIVE DESIGN
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .article-title { font-size: 2rem; }
+      .visual-placeholder { height: 280px; }
+      .footer-container { flex-direction: column; gap: 32px; }
+      .footer-right { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER (Matches index.html hamburger)
+       ========================================================================== -->
+  <header>
+    <div class="container header-container">
+      <a href="index.html" class="logo" id="header-logo">
+        INDIGO <span class="logo-indigo">ARCHIVE</span>
+      </a>
+      <button class="hamburger-btn" id="hamburger-open" aria-label="メニューを開く">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       ARTICLE HEADER
+       ========================================================================== -->
+  <section class="article-header-section">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>&gt;</span>
+      </div>
+      <span class="article-category">Storage Story</span>
+      <h1 class="article-title">
+        生成AI活用による著作権侵害<br>リスク回避する為の知識<br>
+        <span style="font-size: 1.4rem; color: var(--color-text-secondary); font-weight: 300; display: block; margin-top: 16px; font-style: italic;">
+          — 日本の四季における適切な湿度管理と保管の物語 —
+        </span>
+      </h1>
+      <time class="article-date" datetime="2026-03-12">2026.03.12 / JOURNAL #01</time>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       ARTICLE BODY
+       ========================================================================== -->
+  <div class="container">
+    <main class="essay-layout">
+      
+      <!-- Main visual -->
+      <div class="essay-main-visual" id="visual-lead">
+        <div class="visual-placeholder">
+          <span class="visual-graphic" style="height: auto; background: none; border: none; padding: 0;"></span>
+            <img src="images/著作権記事.png " alt=" Dark Closet & Muted Blue Denim"style="width: 100%; max-width: 600px; height: auto; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        </div>
+        <p class="visual-caption">
+          ※画像は生成AI（Gemini）を使用して作成</p>
+      </div>
+
+      <!-- Essay Content -->
+      <div class="essay-content">
+        <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+          現在、生成AIは仕事やプライベートなど、さまざまな場面で活用されるようになりました。
+          スマートフォンやパソコンがあれば誰でも簡単に利用できる便利なツールですが、SNSや会社資料作成で生成AIを活用し、投稿・掲載した際に著作権侵害にあたり、逮捕や書類送検に至ることもあります。
+          初めに「生成AI　著作権侵害」でGoogle検索すると文化庁作成の「AIと著作権」という2023年実施のセミナー資料がありました。
+          そちらのPDFを生成AIにて要約させた結果、AIと著作権の関係については、大きく3つの場面に分けて検討する必要があります。
+        </p>
+
+        <ul>
+          <li>1.開発・学習段階（AIにデータを学習させる場合）</li>
+          <li>2.生成・利用段階（AIで生成したコンテンツを公開・販売する場合）</li>
+          <li>3.AI生成物は「著作物」に当たるか（著作権が発生するか） </li>
+        </ul>
+          <p></p>
+          <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+            難しい日本語が羅列しているので、生成AIを活用し、自分も記事を書きながら学び、わかりやすく解説していきます。
+          </p>
+          <h2>1. 開発・学習段階（AIにデータを学習させる場合）</h2>
+
+          <div class="photo-break">
+          <div class="photo-frame">
+            <div class="img-placeholder"style="height: auto; background: none; border: none; padding: 0;"></div>
+             <img src="images/著作権ロボット.png" alt="[ Photo: Jeans wrapped in breathable non-woven fabric ]" style="width: 100%; max-width: 600px; height: auto; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+          </div>
+
+          <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+            著作権法第30条の4により、AI開発のための情報解析のように、著作物の「享受（鑑賞して楽しむことなど）を目的としない利用」については、原則として著作権者の許諾なく行うことが可能です。 
+            ただし、情報解析用に販売されているデータベースをAI学習目的で無断複製するなど、「著作権者の利益を不当に害することとなる場合」や、享受目的が併存するような場合は、原則通り権利者の許諾が必要となります。</p>
+
+          <h3>「享受（きょうじゅ）」とは</h3>
+          <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+            かっこ内にあるように（鑑賞して楽しむことなど）とのことなので、 「AIを賢くするために大量の画像や文章を読み込ませて分析する作業」自体は、その作品をAIが数値データとしてインプットしているだけであり、
+            人間が鑑賞して楽しんでいるわけではないため、基本的には違法にはなりません。
+             <br>しかし、<b>有料で販売されているデータを勝手に使って学習させたり、特定のクリエイターの絵柄をそっくりそのまま出力させる目的で学習させたりする場合は、権利者の不利益になるためNG（許諾が必要）になる可能性があります。</b>
+             過去の事例としては海外で海賊版サイトから700万冊の書籍をダウンロードし、AIの学習に使用したと提訴され、2000億円超の支払いで2025年に和解・仮承認をしたケースがあります。</p>
+
+             <h4><b>【2026年　3月現在での変更点・注意点】</b> </h4>
+
+              <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+                2023年はやや抽象的ではあったが、2024年の文化庁の新たな見解により、現在はルールがより明確化されています。特定のクリエイターの画像・文章などだけを狙って大量に学習させることは、
+                意図的な過学習（オーバーフィッティング）とみなされ、著作権侵害になる可能性が高いため絶対にやめましょう。また、AIが回答を生成する際、社内データベースや外部サイトから既存の著作物を引っ張ってきて、
+                そのままの表現を出力させるような仕組みを作るためのデータ複製は、原則として許諾が必要とされました。</p>
+              
+              <h2>2. 生成・利用段階　<br>（AIで生成したコンテンツを公開・販売する場合） </h2>
+              <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+                AI生成物が既存の著作権を侵害しているか否かは、人がAIを使わずに作品を制作した場合と全く同じ基準で判断されます。 具体的には、既存の著作物との「類似性」と、既存の著作物をもとに作成したかという「依拠性」の両方が認められるかが要件となります。
+                私的に鑑賞するために生成するだけなら例外（権利制限規定）として許容されますが、類似性と依拠性のあるAI生成物を無断でネット上に公開（アップロード）したり販売したりすると著作権侵害となり、損害賠償請求、差止請求、刑事罰などの対象となります。これはつまり、<b>AIで作ったイラストや文章が、既存のアニメキャラクターやクリエイターの作品にそっくり（類似性）で、なおかつその元ネタを知った上で作らせた（依拠性）と判断されると、著作権侵害になってしまう</b>ということです。
+                <br>「個人でこっそり出力して楽しむ」分には問題ありませんが、生成したものをそのままInstagramやX(旧Twitter)にアップしたり、仕事のプレゼン資料に使ったり、販売したりする際は十分に注意が必要です。
+                例えば、画像では生成AIへのプロンプト（指示文）に「〇山〇明風の画像を作成して」と入力して生成した画像は「類似性」「依拠性」に当てはまる可能性が高いですので、SNSなど公開前に「既存の何かに似すぎていないか？」を確認するようにしましょう。
+                生成したモノをSNSに載せたいと思ったら、最近ではテレビや広告でも見られる
+                <strong>「※画像は生成AIを使用して作成しています。」という注記やウォーターマークなどを入れるなどを記載し、生成AI作成を強調し発信する必要があります。</strong> </p>
+
+ 
+               <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">本記事内で掲載している画像は生成AIで作成した画像でモチーフは
+                「パブリックドメイン（公共財産）」になっているモノを使用し、AIで作成しているので、
+                <b>わざと文字化けさせてます</b>。
+              </p>
+
+
+              <h3>2025年に日本でも3件書類送検、逮捕されたケースがあります。</h3>
+
+              <ul>
+                <li>1.生成AI画像で初の摘発　生成AI画像を用いて作成された画像を権利者に無断で電子書籍の表紙として使用・複製し書類送検</li>
+                <li>2.超有名アニメのキャラクターを生成AIで生成・ポスター作成し、販売目的で所持していたため、書類送検</li>
+                <li>3.超有名昭和の名作映画をAIで無断でカラー化し、DVDで販売し逮捕 </li>
+              </ul>
+
+               <p></p>
+
+               <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+                3.「AIによる無断カラー化」という発想自体は興味深いものですが、
+                このような行為は興味を持つ人も多いかもしれませんが、無断で販売すれば著作権侵害となり、逮捕される可能性があります。</p>
+
+                <h4>【2026年　3月現在での変更点・注意点】 </h4>
+
+                <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+                  生成したものをそのままSNSや業務に使うのではなく、「Google画像検索などで既存の作品と酷似していないかチェックする」というプロセスを設けることが、企業や個人のガイドラインとして強く推奨されるようになっています。	
+                  また、AIに機密情報や他人の著作物をプロンプトとして入力すること自体を制限するルールが一般化しています。
+                  機密情報を入力するとAIの学習の為に使用され、AI運用会社サーバーから情報が流出する恐れもあるため、個々人が十分に注意する必要があります。</p>
+
+                  <h2>3. AI生成物は「著作物」に当たるか（著作権が発生するか） </h2>
+              <div class="essay-main-visual" id="visual-lead">
+        <div class="visual-placeholder">
+          <span class="visual-graphic" style="height: auto; background: none; border: none; padding: 0;"></span>
+            <img src="images/著作権ウォーターマーク.png" alt=" Dark Closet & Muted Blue Denim"style="width: 100%; max-width: 600px; height: auto; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        </div>
+        <p class="visual-caption">
+          ※画像は生成AI（Gemini）を使用して作成</p>
+      </div>
+
+             <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+             人が短い指示（プロンプト）を与えてボタンを押すだけでAIが自律的に生成したものは、人の「思想または感情を創作的に表現したもの」ではないため、著作物には該当しません。 
+             一方で、人がAIを単なる「道具」として使用したと認められる場合、すなわち人に「創作意図」があり、結果を吟味して修正を加えるなどの「創作的寄与」があったと認められる場合は、そのAI生成物は著作物に該当し、
+             AI利用者が著作者になると考えられています。
+             簡単に言うと、「AIにお任せで短い指示でポンと出力しただけのもの」は、誰の著作物でもない（フリー素材のような扱い）。
+             部下に大ざっぱな指示だけし、当人は何もせず、プレゼンで「私が作りました。」って言ういいところだけ持っていく上司のような状態では著作物としては認められないということです。
+             一方で、人間が「こういう作品にしたい」という強い意図を持ち、何度もプロンプトを細かく調整したり、出力された画像や文章を下書きとし、自分で大幅な加筆・修正を行ったりして「自分自身のオリジナリティ」を注ぎ込んだと言える場合は、
+             あなた自身の著作物として認められる可能性があります。
+             （※ただし、どれだけ加筆修正を行っても、元のAI生成物が他人の既存作品に類似している場合は、著作権侵害となるため注意が必要です）
+            </p>
+
+            <h3>【2026年　3月現在での変更点・注意点】 </h3>
+            <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+            2024年に成立した世界初の包括的なAI規制法（AI法/AI Act）が、2025年〜2026年にかけて順次欧州などから施行されています。
+            これにより、「AIによって生成されたコンテンツであることを明示する（ウォーターマークを入れるなど）」という透明性の確保が世界的なスタンダードになりつつあり、日本でもこの流れを受け議論が活発化しています。</p>
+
+            <h2>まとめ：生成AIを安全に活用するためのポイント </h2>
+            <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+            <strong>生成AIはとても便利ですが、使い方を一歩間違えると著作権トラブルに巻き込まれる可能性があります。</strong>
+            安全に活用するために、以下のポイントを意識しましょう。</p>
+            <ul>
+              <li><b>プロンプト（指示文）に特定の作家名や既存のキャラクター名、作品名を入れて生成しない</b></li>
+              <li><b>仕事やSNSで使う場合は、生成物をそのまま使わず、「類似性」「依拠性」がないか確認し、必要な修正（ウォーターマークなど）を加える</b></li>
+              <li><b>投稿・提出の前に見返し、生成AIに著作権侵害のリスクがないか確かめる</b></li>
+              <li><b>他人の権利を侵害していないか、常に配慮する意識を持つ</b></li>
+              <li><b>この記事は2026年　3月に作成の為、インフルエンサーやSNSを多用する方や生成AIの回答を鵜呑みし、コピペする方は「著作権侵害」に関しての法律が随時変わっている可能性があるので、情報をアップデートする必要がある</b></li>
+            </ul>
+
+             <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+              正しい知識を身につけ、アップデートしていき、AIという便利なツールを仕事やプライベートの強い味方にしていきましょう！</p>
+
+
+        
+  <!-- ==========================================================================
+       GLOBAL DRAWER MENU
+       ========================================================================== -->
+  <div class="drawer-overlay" id="global-drawer">
+    <button class="drawer-close-btn" id="hamburger-close" aria-label="閉じる">&times;</button>
+    <nav aria-label="グローバルナビゲーション">
+      <ul class="drawer-menu">
+        <li><a href="index.html#home" class="drawer-menu-link"><span>01</span>Home</a></li>
+        <li><a href="index.html#concept" class="drawer-menu-link"><span>02</span>Concept</a></li>
+        <li><a href="index.html#menu-page" class="drawer-menu-link"><span>03</span>Company Profile</a></li>
+        <li><a href="index.html#menu-page" class="drawer-menu-link"><span>04</span>Columns & Blog</a></li>
+        <li><a href="index.html#menu-page" class="drawer-menu-link"><span>05</span>Contact Us</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer>
+    <div class="container footer-container">
+       <div class="footer-logo">PORTFOLIO</div>
+            <ul class="footer-nav">
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#works-web">Works/Web</a></li>
+                <li><a href="#works-excel">Works/Excel</a></li>
+                <li><a href="#writhing">Writhing</a></li>
+                <li><a href="#skills">Skills</a></li>
+            </ul>
+            <p class="copyright">&copy; 2026 . All Rights Reserved.</p>
+        </div>
+    </footer>
+
+  <!-- ==========================================================================
+       JAVASCRIPT FOR INTERACTION
+       ========================================================================== -->
+  <script>
+    const openDrawerBtn = document.getElementById('hamburger-open');
+    const closeDrawerBtn = document.getElementById('hamburger-close');
+    const globalDrawer = document.getElementById('global-drawer');
+
+    openDrawerBtn.addEventListener('click', () => {
+      globalDrawer.classList.add('active');
+    });
+
+    closeDrawerBtn.addEventListener('click', () => {
+      globalDrawer.classList.remove('active');
+    });
+
+    document.querySelectorAll('.drawer-menu-link').forEach(link => {
+      link.addEventListener('click', () => {
+        globalDrawer.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>
