@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>コード生成AIは無料で使える？おすすめツールとメリット・デメリットを初心者向けに解説 | Writing記事</title>
+  <meta name="description" content="コード生成AIは無料でも十分に活用可能です。おすすめ（無料）ツールの考え方を含め、メリット・デメリットや正しい使い方を初心者向けにわかりやすく解説します。">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Noto+Serif+JP:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       COMMON STYLES (Aligned with index.html)
+       ========================================================================== */
+    :root {
+      --color-bg: #07080a;
+      --color-surface: #0f1115;
+      --color-surface-card: #14171d;
+      --color-border: #232a33;
+      --color-text-primary: #e1e7f0;
+      --color-text-secondary: #8c9ba5;
+      --color-text-muted: #4e5a66;
+      --color-indigo-dark: #0f1d30;
+      --color-indigo-bright: #3867d6;
+      --color-indigo-light: #5f8de8;
+      --color-copper: #8b5a2b; /* Muted leather brown */
+      --color-copper-light: #c28854;
+      
+      --font-serif: 'Noto Serif JP', 'Playfair Display', Georgia, serif;
+      --font-sans: 'Montserrat', 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      
+      --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      font-family: var(--font-serif); /* Main body is Serif for literary feel */
+      line-height: 2.0; /* Wider spacing for comfortable reading */
+      letter-spacing: 0.03em;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION (Hamburger & Drawer UI to match index.html)
+       ========================================================================== */
+    header {
+      background-color: rgba(7, 8, 10, 0.95);
+      border-bottom: 1px solid var(--color-border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+    }
+
+    .logo {
+      font-family: var(--font-serif);
+      font-weight: 900;
+      font-size: 1.5rem;
+      letter-spacing: 0.15em;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-indigo {
+      color: var(--color-indigo-light);
+    }
+
+    .hamburger-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+    }
+
+    .hamburger-btn span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--color-text-primary);
+      transition: var(--transition-smooth);
+    }
+
+    .hamburger-btn:hover span {
+      background-color: var(--color-copper);
+    }
+
+    /* Drawer Overlay */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(10, 11, 13, 0.95);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition-smooth);
+    }
+
+    .drawer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-close-btn {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-primary);
+      font-size: 1.25rem;
+      transition: var(--transition-smooth);
+    }
+
+    .drawer-close-btn:hover {
+      border-color: var(--color-copper);
+      color: var(--color-copper-light);
+      transform: rotate(90deg);
+    }
+
+    .drawer-menu {
+      list-style: none;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .drawer-menu-link {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      letter-spacing: 0.15em;
+      color: var(--color-text-secondary);
+      transition: var(--transition-smooth);
+    }
+
+    .drawer-menu-link:hover {
+      color: #ffffff;
+    }
+
+    .drawer-menu-link span {
+      color: var(--color-copper);
+      font-size: 1.2rem;
+      margin-right: 12px;
+    }
+
+    /* ==========================================================================
+       LITERARY ARTICLE HEADER
+       ========================================================================== */
+    .article-header-section {
+      padding: 180px 0 80px;
+      text-align: center;
+      background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-bg) 100%);
+    }
+
+    .breadcrumbs {
+      display: inline-flex;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 32px;
+    }
+
+    .breadcrumbs a:hover {
+      color: var(--color-copper-light);
+    }
+
+    .article-category {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--color-copper-light);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .article-title {
+      font-size: 2.8rem;
+      line-height: 1.45;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      max-width: 900px;
+      margin: 0 auto 32px;
+      letter-spacing: 0.05em;
+    }
+
+    .article-date {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ==========================================================================
+       POETIC ARTICLE BODY LAYOUT
+       ========================================================================== */
+    .essay-layout {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px 120px;
+    }
+
+    /* Huge Hero Graphic */
+    .essay-main-visual {
+      border: 1px solid var(--color-border);
+      padding: 16px;
+      background-color: var(--color-surface);
+      margin-bottom: 80px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    }
+
+    .visual-placeholder {
+      background: linear-gradient(135deg, #111a24 0%, #060a0f 100%); 
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .visual-text {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--color-copper-light);
+      text-transform: uppercase;
+    }
+
+    .visual-caption {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      text-align: center;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    .essay-content p {
+      font-size: 1.05rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 48px;
+      text-align: justify;
+      text-indent: 1em;
+    }
+
+    .essay-content p.no-indent {
+      text-indent: 0;
+    }
+
+    .essay-content h2 {
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      margin: 96px 0 40px;
+      text-align: center;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+
+    .essay-content h2::after {
+      content: '◇';
+      display: block;
+      font-size: 0.8rem;
+      color: var(--color-copper);
+      margin-top: 16px;
+    }
+
+    /* Poetry Block */
+    .poetry-block {
+      margin: 64px auto;
+      max-width: 600px;
+      text-align: center;
+      font-style: italic;
+      color: var(--color-text-primary);
+      position: relative;
+      padding: 32px 0;
+    }
+
+    .poetry-block::before, .poetry-block::after {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background-color: var(--color-border);
+      margin: 0 auto;
+    }
+
+    .poetry-block::before { margin-bottom: 24px; }
+    .poetry-block::after { margin-top: 24px; }
+
+    .poetry-line {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* Inline Image / Photo Break */
+    .photo-break {
+      margin: 80px 0;
+      text-align: center;
+    }
+
+    .photo-frame {
+      border: 1px solid var(--color-border);
+      padding: 8px;
+      background-color: var(--color-surface);
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .photo-frame .img-placeholder {
+      background: linear-gradient(135deg, #13171e 0%, #0a0c10 100%);
+      width: 500px;
+      height: 300px;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    .photo-desc {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 8px;
+    }
+
+    /* Next Article Link Block */
+    .next-article-link {
+      margin-top: 120px;
+      border: 1px solid var(--color-border);
+      background-color: var(--color-surface);
+      padding: 40px;
+      text-align: center;
+      transition: var(--transition-smooth);
+      display: block;
+    }
+
+    .next-article-link:hover {
+      border-color: var(--color-copper);
+      background-color: var(--color-surface-card);
+    }
+
+    .next-label {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      color: var(--color-copper);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .next-title {
+      font-size: 1.35rem;
+      color: var(--color-text-primary);
+      margin-bottom: 8px;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      background-color: #030405;
+      border-top: 1px solid var(--color-border);
+      padding: 60px 0;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+    }
+
+     .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            letter-spacing: 0.2em;
+            margin-bottom: 32px;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 48px;
+            list-style: none;
+        }
+
+        .footer-nav a {
+            font-size: 12px;
+            color: #666666;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-nav a:hover {
+            color: #1a1a1a;
+        }
+
+        .copyright {
+            font-size: 11px;
+            color: #999999;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+    /*.footer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+    }
+
+    .footer-left {
+      max-width: 600px;
+    }
+
+    .footer-brand {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    }
+
+    .footer-desc {
+      line-height: 1.8;
+      color: var(--color-text-muted);
+      margin-bottom: 24px;
+    }
+
+    .footer-right {
+      text-align: right;
+      min-width: 300px;
+    }
+
+    .footer-right-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .footer-address {
+      line-height: 1.8;
+      color: var(--color-text-muted);
+      font-style: normal;
+    }*/
+
+    /* ==========================================================================
+       RESPONSIVE DESIGN
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .article-title { font-size: 2rem; }
+      .visual-placeholder { height: 280px; }
+      .footer-container { flex-direction: column; gap: 32px; }
+      .footer-right { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER (Matches index.html hamburger)
+       ========================================================================== -->
+  <header>
+    <div class="container header-container">
+      <a href="index.html" class="logo" id="header-logo">
+        Portfolio <span class="logo-indigo"></span>
+      </a>
+      
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       ARTICLE HEADER
+       ========================================================================== -->
+      <section class="article-header-section">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>&gt;</span>
+        <span>Writing</span>
+      </div>
+      <span class="article-category">Programming & AI</span>
+      <h1 class="article-title">
+        コード生成AIは無料で使える？<br>おすすめツールとメリット・デメリットを<br>初心者向けに解説
+      </h1>
+      <time class="article-date" datetime="2026-03-12">2026.03.12 / JOURNAL #02</time>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       ARTICLE BODY
+       ========================================================================== -->
+  <div class="container">
+    <main class="essay-layout">
+      
+      <!-- Main visual -->
+      <div class="essay-main-visual" id="visual-lead">
+        <div class="visual-placeholder">
+          <img src="images/image1.png" alt="コード生成AIのイメージ" style="width: 100%; max-width: 600px; height: auto; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        </div>
+        <p class="visual-caption">※画像は生成AIを使用して作成</p>
+      </div>
+
+      <!-- Essay Content -->
+      <div class="essay-content">
+        <p class="no-indent" style="font-size: 1.2rem; color: var(--color-text-primary); line-height: 2.1; margin-bottom: 64px;">
+          「コード生成AIって無料で使えるの？」<br>
+          「初心者でも使えるおすすめツールが知りたい」<br>
+          近年、コード生成AIの進化により、プログラミングはより身近なものになりました。特に「無料で使えるコード生成AI」を探している初心者の方は多いのではないでしょうか。
+        </p>
+
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 48px;">
+          しかし一方で、「AIは危険ではないのか？」「本当にスキルが身につくのか？」といった不安もあります。
+        </p>
+
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 48px;">
+          結論から言うと、無料のコード生成AIでも十分に学習・開発は可能であり、初心者にとって最強のサポートツールです。ただし、使い方を間違えると成長が止まるリスクもあります。
+        </p>
+
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 64px;">
+          本記事では、コード生成AIのおすすめ（無料）ツールの考え方を含め、メリット・デメリットや正しい使い方をわかりやすく解説します。
+        </p>
+
+        <h2>コード生成AIは無料で使える？初心者向け結論</h2>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          結論として、コード生成AIは無料でも十分に活用可能です。現在は多くのAIツールが無料プランを提供しており、以下の基本機能は無料で使えます。
+        </p>
+        <ul style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0;">
+          <li style="margin-bottom: 12px;">コードの自動生成</li>
+          <li style="margin-bottom: 12px;">エラー解説</li>
+          <li style="margin-bottom: 12px;">学習サポート</li>
+        </ul>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 64px;">
+          ただし重要なのは、「どのツールを使うか」よりも「どう、使うか」です。
+        </p>
+
+        <h2>コード生成AIとは？初心者でもわかる仕組み</h2>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          コード生成AIとは、自然言語で指示するだけで、AIがプログラムコードを作成してくれるツールです。
+        </p>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 48px;">
+          例えば、「ToDoリストを作りたい」と入力するだけで、コードの雛形が生成されます。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">AIでできること</h3>
+        <ul style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0;">
+          <li style="margin-bottom: 12px;">Webアプリの作成</li>
+          <li style="margin-bottom: 12px;">コードの自動生成</li>
+          <li style="margin-bottom: 12px;">エラーの原因分析</li>
+        </ul>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">AIでできないこと</h3>
+        <ul style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0;">
+          <li style="margin-bottom: 12px;">完全な設計判断</li>
+          <li style="margin-bottom: 12px;">複雑な要件への対応</li>
+        </ul>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 64px;">
+          そのため、AIはあくまで補助ツールとして使うのが重要です。
+        </p>
+
+        <h2>コード生成AI（無料）のメリット</h2>
+        
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">学習スピードが大幅に上がる</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          無料のコード生成AIでも、コード例や解説をすぐに得られるため、学習効率が大きく向上します。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">初心者でもすぐに開発できる</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          雛形を自動生成できるため、ゼロから書く必要がなく、初心者でもすぐに動くアプリを作れます。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">作業効率が上がる</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          繰り返し作業をAIに任せることで、開発スピードが向上します。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">エラー解決をサポートしてくれる</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 64px;">
+          エラー内容を入力するだけで、原因や修正方法を提案してくれます。
+        </p>
+
+        <h2>コード生成AIのデメリットと注意点</h2>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">間違ったコードが生成されることがある</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          無料・有料に関わらず、AIは完璧ではありません。生成AIのチャットの下にも「回答は必ずしも正しいとは限りません」と記載があります。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">セキュリティリスクがある</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          脆弱性を含むコードが生成される可能性があります。知識がついてくればおかしい点などに気付き、コードの書き換えなど出来ますが、初心者には難しいと思います。
+        </p>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          例えばですが、2つの生成AIを使用し、片方でコードを生成し、もう片方でコードを参照し、訂正されれば「なぜ？訂正したのか」を確認し、自分の知識を高めていくことでコードをより良きものに仕上げる・自分の知識を高めると一石二鳥です。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">AIに依存すると成長しない</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-primary); line-height: 2.0; margin-bottom: 64px;">
+          <strong>コピペだけではスキルは身につきません。疑問に思うことは常に生成AIに聞き、コード生成時はAIを「先生」としてみるようにしましょう。</strong>
+        </p>
+
+        <h2>初心者におすすめのコード生成AIの選び方【無料】</h2>
+        
+        <div class="photo-break">
+          <div class="photo-frame">
+            <img src="images/image2.png" alt="AIツールの選び方" style="width: 100%; max-width: 600px; height: auto; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+          </div>
+          <p class="photo-desc">※画像は生成AIを使用して作成</p>
+        </div>
+
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          無料のコード生成AIを選ぶ際は、以下を意識しましょう。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">日本語対応しているか</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          初心者は日本語で使えるツールがおすすめです。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">解説機能があるか</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          コードだけでなく、説明してくれるAIを選びましょう。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">無料でどこまで使えるか</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          制限の範囲を確認することが重要です。「無料×使いやすさ」で選ぶのがポイントです。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">迷ったら「ChatGPT」がおすすめ</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          初心者に最もおすすめのコード生成AIは、ChatGPTのように「コード生成＋解説」ができるツールです。
+        </p>
+
+        <h4 style="font-size: 1.15rem; margin: 30px 0 16px; font-weight: 500; color: var(--color-text-primary);">ChatGPTのメリット</h4>
+        <ul style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0;">
+          <li style="margin-bottom: 12px;"><strong>コードの意味をわかりやすく解説してくれる</strong><br>→ 「このコード何？」と聞くだけで丁寧に説明</li>
+          <li style="margin-bottom: 12px;"><strong>エラーの原因と修正方法を教えてくれる</strong><br>→ 初心者がつまずきやすいポイントをすぐ解決</li>
+          <li style="margin-bottom: 12px;"><strong>日本語でそのまま質問できる</strong><br>→ 英語が苦手でも問題なし</li>
+          <li style="margin-bottom: 12px;"><strong>コードの改善・最適化も提案してくれる</strong><br>→ より良い書き方を学べる</li>
+          <li style="margin-bottom: 12px;"><strong>学習の“先生”として使える</strong><br>→ わからないことをその場で解決できる</li>
+        </ul>
+
+        <h4 style="font-size: 1.15rem; margin: 30px 0 16px; font-weight: 500; color: var(--color-text-primary);">こんな使い方がおすすめ</h4>
+        <ul style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0; list-style-type: circle;">
+          <li style="margin-bottom: 12px;">「このコードの意味を初心者向けに説明して」</li>
+          <li style="margin-bottom: 12px;">「エラーの原因を教えて」</li>
+          <li style="margin-bottom: 12px;">「もっと簡単な書き方にして」</li>
+        </ul>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 64px;">
+          このように使うことで、単なるツールではなく“学習パートナー”として活用できます。
+        </p>
+
+        <h2>初心者は「ToDoリストアプリ」から作るのがおすすめ</h2>
+        <p style="font-size: 1.15rem; color: var(--color-text-primary); line-height: 2.0; margin-bottom: 32px;">
+          <strong>コード生成AIを使い始めるなら、ToDoリストアプリから作るのが最適です。</strong>
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">なぜToDoアプリがおすすめ？</h3>
+        <ul style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0;">
+          <li style="margin-bottom: 12px;">シンプルな構造（追加・削除・表示）</li>
+          <li style="margin-bottom: 12px;">AIで簡単に生成できる</li>
+          <li style="margin-bottom: 12px;">学習に必要な基礎が詰まっている</li>
+        </ul>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          初心者でも「動くアプリ」をすぐに体験できます。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">ToDoアプリで学べること</h3>
+        <ul style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0;">
+          <li style="margin-bottom: 12px;">プログラムの基本構造</li>
+          <li style="margin-bottom: 12px;">データの扱い方</li>
+          <li style="margin-bottom: 12px;">UI操作の仕組み</li>
+        </ul>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          さらに、機能追加をすることで理解が深まります。
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">AIを使った学習手順</h3>
+        <ol style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0;">
+          <li style="margin-bottom: 12px;">AIにコードを作らせる</li>
+          <li style="margin-bottom: 12px;">実際動かしてみる</li>
+          <li style="margin-bottom: 12px;">内容を理解する</li>
+          <li style="margin-bottom: 12px;">機能を追加する</li>
+        </ol>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 64px;">
+          この流れが最短でスキルを伸ばす方法です。
+        </p>
+
+        <h2>よくある失敗例と対策</h2>
+        
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">コードをそのまま使う</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          対策：必ず理解する
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">AIを鵜呑みにする</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          対策：検証する
+        </p>
+
+        <h3 style="font-size: 1.3rem; margin: 40px 0 20px; font-weight: 400; color: var(--color-text-primary);">エラーを放置する</h3>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 64px;">
+          対策：AIに質問する
+        </p>
+
+        <h2>まとめ｜無料のコード生成AIは初心者の最強ツール</h2>
+        
+        <div class="photo-break">
+          <div class="photo-frame">
+            <img src="images/image3.png" alt="まとめ" style="width: 100%; max-width: 600px; height: auto; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+          </div>
+          <p class="photo-desc">※画像は生成AIを使用して作成</p>
+        </div>
+
+        <p style="font-size: 1.15rem; color: var(--color-text-primary); line-height: 2.0; margin-bottom: 32px;">
+          <strong>コード生成AIは無料でも十分に活用でき、初心者にとって非常に強力な学習ツールです。</strong>
+        </p>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          ただし重要なのは、以下の2点です。
+        </p>
+        <ul style="margin-bottom: 48px; padding-left: 20px; color: var(--color-text-secondary); font-size: 1.1rem; line-height: 2.0;">
+          <li style="margin-bottom: 12px;">正しく使うこと</li>
+          <li style="margin-bottom: 12px;">理解しながら使うこと</li>
+        </ul>
+        <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 2.0; margin-bottom: 32px;">
+          また、ToDoリストアプリのようなシンプルな題材から始めることで、AIの力を最大限に活かしながら効率よくスキルを身につけることができます。
+        </p>
+        <p style="font-size: 1.15rem; color: var(--color-text-primary); line-height: 2.0; margin-bottom: 64px;">
+          <strong>「AIに任せる」のではなく、「AIで学ぶ」ことが成功のポイントです。</strong>
+        </p>
+
+        <!-- Link to Next Column -->
+          <a href="article-1.html" class="next-article-link">
+          <span class="next-label">Next Column </span>
+          <h4 class="next-title">生成AI活用による著作権侵害<br>リスク回避する為の知識<br></h4>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0;"></p>
+        </a>
+
+      </div>
+    </main>
+  </div>  
+                        
+  <!-- ==========================================================================
+       GLOBAL DRAWER MENU
+       ========================================================================== -->
+  <div class="drawer-overlay" id="global-drawer">
+    <button class="drawer-close-btn" id="hamburger-close" aria-label="閉じる">&times;</button>
+    <nav aria-label="グローバルナビゲーション">
+      <ul class="drawer-menu">
+        <li><a href="index.html#home" class="drawer-menu-link"><span>01</span>Home</a></li>
+        <li><a href="index.html#concept" class="drawer-menu-link"><span>02</span>Concept</a></li>
+        <li><a href="index.html#menu-page" class="drawer-menu-link"><span>03</span>Company Profile</a></li>
+        <li><a href="index.html#menu-page" class="drawer-menu-link"><span>04</span>Columns & Blog</a></li>
+        <li><a href="index.html#menu-page" class="drawer-menu-link"><span>05</span>Contact Us</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer>
+    <div class="container footer-container">
+       <div class="footer-logo">PORTFOLIO</div>
+            <ul class="footer-nav">
+               <li><a href="index.html#profile">Profile</a></li>
+                <li><a href="index.html#experience">Experience</a></li>
+                <li><a href="index.html#works-web">Works/Web</a></li>
+                <li><a href="index.html#works-excel">Works/Excel</a></li>
+                <li><a href="index.html#writhing">Writhing</a></li>
+                <li><a href="index.html#skills">Skills</a></li>
+            </ul>
+            <p class="copyright">&copy; 2026 . All Rights Reserved.</p>
+        </div>
+    </footer>
+
+  <!-- ==========================================================================
+       JAVASCRIPT FOR INTERACTION
+       ========================================================================== -->
+  <script>
+    const openDrawerBtn = document.getElementById('hamburger-open');
+    const closeDrawerBtn = document.getElementById('hamburger-close');
+    const globalDrawer = document.getElementById('global-drawer');
+
+    openDrawerBtn.addEventListener('click', () => {
+      globalDrawer.classList.add('active');
+    });
+
+    closeDrawerBtn.addEventListener('click', () => {
+      globalDrawer.classList.remove('active');
+    });
+
+    document.querySelectorAll('.drawer-menu-link').forEach(link => {
+      link.addEventListener('click', () => {
+        globalDrawer.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>
